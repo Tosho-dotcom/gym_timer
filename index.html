@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0b0b0c">
+  <meta name="color-scheme" content="dark">
+  <title>Gym Timer</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+
+    <!-- Gornji dio: ukupno vrijeme treninga -->
+    <section class="workout" aria-label="Trening">
+      <p class="label">Ukupno vrijeme</p>
+      <div id="workoutTime" class="workout-time" role="timer">00:00:00</div>
+      <div class="workout-actions">
+        <button id="btnStart" class="btn btn-primary" type="button">Start</button>
+        <button id="btnPause" class="btn btn-ghost" type="button" hidden>Pauza</button>
+        <button id="btnEnd" class="btn btn-end" type="button" hidden>
+          <span class="btn-end-fill"></span>
+          <span class="btn-end-text">Kraj treninga</span>
+        </button>
+      </div>
+      <p id="endHint" class="hint" hidden>Drži gumb za kraj treninga</p>
+    </section>
+
+    <!-- Donji dio: pauza između serija -->
+    <section id="rest" class="rest" aria-label="Pauza">
+      <div id="restSelect" class="rest-view rest-select">
+        <p class="label">Pauza</p>
+        <div id="presetGrid" class="preset-grid"></div>
+        <button id="btnCustom" class="btn btn-outline btn-wide" type="button">Namjesti</button>
+      </div>
+
+      <div id="restRun" class="rest-view rest-run" aria-hidden="true">
+        <p class="label">Odmor</p>
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-track" cx="60" cy="60" r="54"/>
+            <circle id="ringProgress" class="ring-progress" cx="60" cy="60" r="54"/>
+          </svg>
+          <div id="restTime" class="rest-time" role="timer">0:00</div>
+        </div>
+        <div class="rest-actions">
+          <button id="btnPlus" class="btn btn-ghost" type="button">+15 s</button>
+          <button id="btnSkip" class="btn btn-outline" type="button">Prekini</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Namještanje vremena (kotačići) -->
+  <div id="sheet" class="sheet" hidden>
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="Namjesti vrijeme pauze">
+      <p class="label">Namjesti vrijeme</p>
+      <div class="wheels">
+        <div class="wheel-col">
+          <div id="wheelMin" class="wheel" tabindex="0" aria-label="Minute"></div>
+          <span class="wheel-unit">min</span>
+        </div>
+        <span class="wheel-sep">:</span>
+        <div class="wheel-col">
+          <div id="wheelSec" class="wheel" tabindex="0" aria-label="Sekunde"></div>
+          <span class="wheel-unit">sek</span>
+        </div>
+        <div class="wheel-band" aria-hidden="true"></div>
+      </div>
+      <div class="sheet-actions">
+        <button id="btnSheetStart" class="btn btn-primary" type="button">Pokreni</button>
+        <button id="btnSheetSave" class="btn btn-outline" type="button">Spremi</button>
+      </div>
+      <button id="btnSheetRemove" class="btn-link" type="button" hidden>Ukloni spremljeno vrijeme</button>
+      <button class="btn-link" type="button" data-close>Odustani</button>
+    </div>
+  </div>
+
+  <!-- Sažetak nakon kraja treninga (zatvara se dodirom) -->
+  <div id="summary" class="summary" hidden>
+    <div class="summary-card">
+      <p class="label">Trening završen</p>
+      <div id="summaryTime" class="summary-time">00:00:00</div>
+      <p class="hint">Dodirni za zatvaranje</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
