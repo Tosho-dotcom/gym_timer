@@ -8,6 +8,7 @@
   --accent: #e5242b;
   --accent-dim: #7d1519;
   --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-smooth: cubic-bezier(.45, 0, .2, 1);
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -118,12 +119,33 @@ button { font: inherit; color: inherit; touch-action: manipulation; }
   align-items: center;
   justify-content: center;
   gap: 18px;
-  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  /* izlaz: dulji i mekši prijelaz */
+  transition:
+    opacity 1s var(--ease-smooth),
+    transform 1s var(--ease-smooth),
+    filter 1s var(--ease-smooth);
 }
-.rest-select { opacity: 1; transform: none; }
-.rest-run { opacity: 0; transform: scale(.9); pointer-events: none; }
-.rest.is-running .rest-select { opacity: 0; transform: scale(1.06); pointer-events: none; }
-.rest.is-running .rest-run { opacity: 1; transform: none; pointer-events: auto; }
+.rest-select { opacity: 1; transform: none; filter: none; transition-delay: .3s; }
+.rest-run { opacity: 0; transform: scale(.9); filter: blur(6px); pointer-events: none; }
+.rest.is-running .rest-select {
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(6px);
+  pointer-events: none;
+  transition-duration: .35s;
+  transition-delay: 0s;
+  transition-timing-function: var(--ease);
+}
+.rest.is-running .rest-run {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  pointer-events: auto;
+  transition-duration: .35s;
+  transition-timing-function: var(--ease);
+}
+/* na kraju odbrojavanja brojčanik se lagano povlači i blijedi */
+.rest:not(.is-running) .rest-run { transform: scale(.94); }
 
 .preset-grid {
   display: grid;

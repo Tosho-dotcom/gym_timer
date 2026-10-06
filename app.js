@@ -3,8 +3,9 @@
 
   const STORAGE_KEY = 'gymtimer.v1';
   const FIXED_PRESETS = [90, 120, 180];
-  const WARNING_SECONDS = 5;
+  const WARNING_SECONDS = 10;
   const END_HOLD_MS = 1200;
+  const REST_EXIT_MS = 1300;
   const WHEEL_ITEM_H = 52;
   const MAX_MINUTES = 20;
   const SECOND_STEP = 5;
@@ -82,6 +83,7 @@
   }
 
   // ---------- Wake Lock (ekran ostaje upaljen) ----------
+  let warningTimer = 0;
   let wakeLock = null;
 
   function wantsAwake() {
@@ -224,7 +226,13 @@
     el.restSelect.toggleAttribute('inert', running);
     el.restRun.toggleAttribute('inert', !running);
     el.restRun.setAttribute('aria-hidden', String(!running));
-    if (!running) el.rest.classList.remove('is-warning');
+    clearTimeout(warningTimer);
+    if (!running) {
+      // pulsiranje se gasi tek kad završi izlazna animacija
+      warningTimer = setTimeout(() => {
+        if (!state.rest) el.rest.classList.remove('is-warning');
+      }, REST_EXIT_MS);
+    }
   }
 
   function tick() {
@@ -234,6 +242,8 @@
     if (state.rest) {
       const left = state.rest.endAt - now;
       if (left <= 0) {
+        el.restTime.textContent = fmtShort(0);
+        el.ringProgress.style.strokeDashoffset = String(RING_LENGTH);
         stopRest();
         return;
       }
